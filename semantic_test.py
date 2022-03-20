@@ -12,9 +12,6 @@ SEED = 42
 utils.set_global_seed(SEED)
 utils.prepare_cudnn(deterministic=True)
 
-# Create segmentation model
-model = smp.Unet("resnet34", encoder_weights="imagenet", classes=1, activation=None)
-
 # Datasets
 root = "."
 SimpleOxfordPetDataset.download(root)
@@ -60,11 +57,14 @@ plt.subplot(1, 2, 2)
 plt.imshow(sample["mask"].squeeze())  # for visualization we have to remove 3rd dimension of mask
 # plt.show()
 
+# Create segmentation model
+model = smp.Unet("resnet34", encoder_weights="imagenet", classes=1, activation=None)
 
 batch = next(iter(test_dataloader))
 with torch.no_grad():
     model.eval()
     logits = model(batch["image"].float())
+
 pr_masks = logits.sigmoid()
 
 for image, gt_mask, pr_mask in zip(batch["image"], batch["mask"], pr_masks):
@@ -84,5 +84,4 @@ for image, gt_mask, pr_mask in zip(batch["image"], batch["mask"], pr_masks):
     plt.imshow(pr_mask.numpy().squeeze())  # just squeeze classes dim, because we have only one class
     plt.title("Prediction")
     plt.axis("off")
-
     plt.show()
