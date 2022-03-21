@@ -62,7 +62,8 @@ plt.imshow(sample["mask"].squeeze())  # for visualization we have to remove 3rd 
 # plt.show()
 
 # Create segmentation model
-
+""" 
+For Your Model:
 class PetModel(pl.LightningModule):
 
     def __init__(self, arch, encoder_name, in_channels, out_classes, **kwargs):
@@ -182,13 +183,12 @@ class PetModel(pl.LightningModule):
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=0.0001)
 
+"""
 
-model = PetModel("FPN", "resnet34", in_channels=3, out_classes=1)
-trainer = pl.Trainer(
-    gpus=1,
-    max_epochs=5,
-)
+# model = PetModel("FPN", "resnet34", in_channels=3, out_classes=1)
 # your_model = model.load_from_checkpoint(checkpoint_path="FPN_Train.ckpt")
+
+model = smp.Unet("resnet34", encoder_weights="imagenet", classes=1)
 
 batch = next(iter(test_dataloader))
 with torch.no_grad():
