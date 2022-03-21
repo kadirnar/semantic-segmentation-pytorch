@@ -38,31 +38,8 @@ train_dataloader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_wo
 valid_dataloader = DataLoader(valid_dataset, batch_size=16, shuffle=False, num_workers=n_cpu)
 test_dataloader = DataLoader(test_dataset, batch_size=16, shuffle=False, num_workers=n_cpu)
 
-# lets look at some samples
-sample = train_dataset[0]
-plt.subplot(1, 2, 1)
-plt.imshow(sample["image"].transpose(1, 2, 0))  # for visualization we have to transpose back to HWC
-plt.subplot(1, 2, 2)
-plt.imshow(sample["mask"].squeeze())  # for visualization we have to remove 3rd dimension of mask
-# plt.show()
-
-sample = valid_dataset[0]
-plt.subplot(1, 2, 1)
-plt.imshow(sample["image"].transpose(1, 2, 0))  # for visualization we have to transpose back to HWC
-plt.subplot(1, 2, 2)
-plt.imshow(sample["mask"].squeeze())  # for visualization we have to remove 3rd dimension of mask
-# plt.show()
-
-sample = test_dataset[0]
-plt.subplot(1, 2, 1)
-plt.imshow(sample["image"].transpose(1, 2, 0))  # for visualization we have to transpose back to HWC
-plt.subplot(1, 2, 2)
-plt.imshow(sample["mask"].squeeze())  # for visualization we have to remove 3rd dimension of mask
-
-
-# plt.show()
-
 # Create segmentation model
+
 
 class PetModel(pl.LightningModule):
 
@@ -195,6 +172,8 @@ trainer.fit(
     train_dataloaders=train_dataloader,
     val_dataloaders=valid_dataloader,
 )
+# Model Save
+trainer.save_checkpoint("FPN_Train.ckpt")
 
 # run validation dataset
 valid_metrics = trainer.validate(model, dataloaders=valid_dataloader, verbose=False)
