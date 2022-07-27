@@ -1,4 +1,4 @@
-catalyst==22.2.1
+catalyst>=22.02,<=22.2.1
 matplotlib==3.5.1
 segmentation_models_pytorch==0.2.1
 torch==1.11.0
